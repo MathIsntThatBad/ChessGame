@@ -105,6 +105,7 @@ public class Chessmana : MonoBehaviour
     //Das passsiert wenn man so 'ne Figur anklickt
     public void InitiateMovePlates()
     {
+        
         if (JSONFile != null)
         {
             string jsonString = JSONFile.text;
@@ -113,13 +114,13 @@ public class Chessmana : MonoBehaviour
                 UnityEngine.Debug.LogError("JSON string is null or empty.");
                 return;
             }
+            /*DAS HIER MUSS UNBEDINGT EINEN NEUEN PLATZ FINDEN DAS IST ECHT NICT NICE*/
             chessData = ChessJsonUtility.fromJSON(jsonString);
         }
         else
         {
             UnityEngine.Debug.LogError("jsonFile is not assigned.");
         }
-
         //On click calculate the possible moves for the board
         calculatePossibelMoves(chessData.possibleMoves);
         //Check if the selected piece is listed as "possibleToMove"
@@ -131,26 +132,6 @@ public class Chessmana : MonoBehaviour
             //END
             //Generate all plates 
             generateAllPlates();
-        }
-    }
-    //DELETE IF GENERATEALL WORKS
-    public void LineMovePlate(int xIncrement, int yIncrement)
-    {
-        Game sc = controller.GetComponent<Game>();
-
-        int x = xBoard + xIncrement;
-        int y = yBoard + yIncrement;
-
-        while (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y) == null)
-        {
-            MovePlateSpawn(x, y);
-            x += xIncrement;
-            y += yIncrement;
-        }
-
-        if (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y).GetComponent<Chessmana>().player != player)
-        {
-            MovePlateAttackSpawn(x, y);
         }
     }
 
@@ -204,9 +185,7 @@ public class Chessmana : MonoBehaviour
 
         GameObject mp = Instantiate(movePlate, new Vector3(x, y, -3.0f), Quaternion.identity);
         MovePlate mpScript = mp.GetComponent<MovePlate>();
-        //HIER KOMMT LINE DIE ANDERS ALS BEI NICHT ATTACK IST
         mpScript.attack = true;
-        //
         mpScript.SetReference(gameObject);
         mpScript.SetCoordinates(matrixX, matrixY);
     }
@@ -216,7 +195,22 @@ public class Chessmana : MonoBehaviour
      */
 
 
-    //This will put all possible moves into a map which than can be accessed by the key which is the 
+    //Version die nested array verwendet 
+    async public void calculatePossibelMoves(string[][]allMoves)
+    {
+        possibleMovesMap = new Dictionary<string, List<string>>();
+        for(int i = 0; i < allMoves.Length; i++)
+        {
+            List<string> movesPerPiece = new List<string>();
+            for(int j = 1; j < allMoves[i].Length; j++)
+            {
+                movesPerPiece.Add(allMoves[i][j]);
+            }
+            possibleMovesMap.Add(allMoves[i][0], movesPerPiece);
+        }
+    }
+
+    //Version die Liste verwendet
     async public void calculatePossibelMoves(List<string> allMoves)
     {
         possibleMovesMap = new Dictionary<string, List<string>>();
@@ -237,8 +231,6 @@ public class Chessmana : MonoBehaviour
         if (possibleMovesMap.TryGetValue(selectedPiecePosition, out List<string> moves))
         {
             string result = string.Join(", ", moves);
-            /*Debugging*/
-            //UnityEngine.Debug.LogError(result);
         }
         return possibleMovesMap.ContainsKey(selectedPiecePosition);
     }
@@ -260,5 +252,4 @@ public class Chessmana : MonoBehaviour
             }
         }
     }
-
 }

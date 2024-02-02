@@ -10,7 +10,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using WebSocketSharp;
 
 
 public class Game : MonoBehaviour
@@ -29,11 +29,41 @@ public class Game : MonoBehaviour
     private bool gameOver = false;
     private int countBlack = 0;
     private int countWhite = 0;
+
+    private WebSocket ws;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        JSONToBoard();
+        /*
+        //string wsUrl = "wss://synchronerealitaeten2324.informatik.uni-bremen.de:8543/chess/game1";
+        //string wsUrl = "wss://94.242.206.52:8543/chess/game1";
+        string wsUrl = "ws://localhost:8080";
+        ws = new WebSocket(wsUrl);
+        ws.Log.Level = LogLevel.Trace;
+        UnityEngine.Debug.LogError("WebSocketConnection");
+        ws.OnMessage += (sender, e) =>
+        {
+            UnityEngine.Debug.LogError("WebSocket Server Response: " + e.Data);
+            // Process the WebSocket received data
+            ChessData blab = ChessJsonUtility.fromJSON(e.Data);
+        };
+        ws.OnError += (sender, e) =>
+        {
+            UnityEngine.Debug.LogError("WebSocket Error: " + e.Message);
+        };
+        ws.OnOpen += (sender, e) =>
+        {
+            UnityEngine.Debug.LogError("WebSocket Opened");
+            ws.Send("Test lololol");
+        };
+        ws.Connect();
+        */
 
+
+
+        JSONToBoard();
         //Set all piece positions on the position board
         for (int i = 0; i < countWhite; i++)
         {
@@ -141,6 +171,10 @@ public class Game : MonoBehaviour
         {
             UnityEngine.Debug.LogError("jsonFile is not assigned.");
         }
+
+
+        /*Das hier soll testen ob es schon möglich ist den JSON-String vom Server zu erhalte*/
+
 
         //Debugging
         /*

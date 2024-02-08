@@ -102,10 +102,10 @@ public class Chessmana : MonoBehaviour
         }
     }
 
-    //Das passsiert wenn man so 'ne Figur anklickt
+    //Schachlogik
     public void InitiateMovePlates()
     {
-        
+
         if (JSONFile != null)
         {
             string jsonString = JSONFile.text;
@@ -114,7 +114,6 @@ public class Chessmana : MonoBehaviour
                 UnityEngine.Debug.LogError("JSON string is null or empty.");
                 return;
             }
-            /*DAS HIER MUSS UNBEDINGT EINEN NEUEN PLATZ FINDEN DAS IST ECHT NICT NICE*/
             chessData = ChessJsonUtility.fromJSON(jsonString);
         }
         else
@@ -133,7 +132,132 @@ public class Chessmana : MonoBehaviour
             //Generate all plates 
             generateAllPlates();
         }
+        
+        
+        /*
+        switch (this.name)
+        {
+            case "q":
+            case "Q":
+                if (possibleToMove()) UnityEngine.Debug.LogError("Piece possible to move");
+                LineMovePlate(1, 0);
+                LineMovePlate(0, 1);
+                LineMovePlate(1, 1);
+                LineMovePlate(-1, 0);
+                LineMovePlate(0, -1);
+                LineMovePlate(-1, -1);
+                LineMovePlate(-1, 1);
+                LineMovePlate(1, -1);
+                break;
+
+            case "n":
+            case "N":
+                LMovePlate();
+                break;
+
+            case "b":
+            case "B":
+                LineMovePlate(1, 1);
+                LineMovePlate(1, -1);
+                LineMovePlate(-1, 1);
+                LineMovePlate(-1, -1);
+                break;
+
+            case "k":
+            case "K":
+                SurroundMovePlate();
+                break;
+
+            case "r":
+            case "R":
+                LineMovePlate(1, 0);
+                LineMovePlate(0, 1);
+                LineMovePlate(-1, 0);
+                LineMovePlate(0, -1);
+                break;
+
+            case "p":
+                if(possibleToMove()) UnityEngine.Debug.LogError("Piece possible to move");
+                BauerMovePlate(xBoard, yBoard - 1);
+                break;
+
+            case "P":
+                if (possibleToMove()) UnityEngine.Debug.LogError("Piece possible to move");
+                BauerMovePlate(xBoard, yBoard + 1);
+                break;
+        }*/
     }
+    //DELETE IF GENERATEALL WORKS
+    public void LineMovePlate(int xIncrement, int yIncrement)
+    {
+        Game sc = controller.GetComponent<Game>();
+
+        int x = xBoard + xIncrement;
+        int y = yBoard + yIncrement;
+
+        while (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y) == null)
+        {
+            MovePlateSpawn(x, y);
+            x += xIncrement;
+            y += yIncrement;
+        }
+
+        if (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y).GetComponent<Chessmana>().player != player)
+        {
+            MovePlateAttackSpawn(x, y);
+        }
+    }
+    //DELETE IF GENERATEALL WORKS
+    public void LMovePlate()
+    {
+        //bcs L shape
+        PointMovePlate(xBoard + 1, yBoard + 2);
+        PointMovePlate(xBoard - 1, yBoard + 2);
+        PointMovePlate(xBoard + 2, yBoard + 1);
+        PointMovePlate(xBoard + 2, yBoard - 1);
+        PointMovePlate(xBoard + 1, yBoard - 2);
+        PointMovePlate(xBoard - 1, yBoard - 2);
+        PointMovePlate(xBoard - 2, yBoard + 1);
+        PointMovePlate(xBoard - 2, yBoard - 1);
+    }
+    //DELETE IF GENERATEALL WORKS
+    public void SurroundMovePlate()
+    {
+        PointMovePlate(xBoard, yBoard + 1);
+        PointMovePlate(xBoard, yBoard - 1);
+        PointMovePlate(xBoard - 1, yBoard - 1);
+        PointMovePlate(xBoard - 1, yBoard - 0);
+        PointMovePlate(xBoard - 1, yBoard + 1);
+        PointMovePlate(xBoard + 1, yBoard - 1);
+        PointMovePlate(xBoard + 1, yBoard - 0);
+        PointMovePlate(xBoard + 1, yBoard + 1);
+    }
+    //DELETE IF GENERATEALL WORKS
+    public void BauerMovePlate(int x, int y)
+    {
+        Game sc = controller.GetComponent<Game>();
+        if (sc.PositionOnBoard(x, y))
+        {
+            if (sc.GetPosition(x, y) == null)
+            {
+                MovePlateSpawn(x, y);
+            }
+
+            //Bauer kann rechts und links angreifen
+            if (sc.PositionOnBoard(x + 1, y) && sc.GetPosition(x + 1, y) != null && sc.GetPosition(x + 1, y).GetComponent<Chessmana>().player != player)
+            {
+                MovePlateAttackSpawn(x + 1, y);
+            }
+
+            if (sc.PositionOnBoard(x - 1, y) && sc.GetPosition(x - 1, y) != null && sc.GetPosition(x - 1, y).GetComponent<Chessmana>().player != player)
+            {
+                MovePlateAttackSpawn(x - 1, y);
+            }
+
+        }
+    }
+
+
 
     //AB hier wieder brauchen 
     public void PointMovePlate(int x, int y)
@@ -185,32 +309,25 @@ public class Chessmana : MonoBehaviour
 
         GameObject mp = Instantiate(movePlate, new Vector3(x, y, -3.0f), Quaternion.identity);
         MovePlate mpScript = mp.GetComponent<MovePlate>();
+        //HIER KOMMT LINE DIE ANDERS ALS BEI NICHT ATTACK IST
         mpScript.attack = true;
+        //
         mpScript.SetReference(gameObject);
         mpScript.SetCoordinates(matrixX, matrixY);
     }
+
+
+
+
+
+
     /*
      Section where the fun begins, calculate the possible moves, check if its possible to move a piece
      and the last method is to generate the patterns given a certain key
      */
 
 
-    //Version die nested array verwendet 
-    async public void calculatePossibelMoves(string[][]allMoves)
-    {
-        possibleMovesMap = new Dictionary<string, List<string>>();
-        for(int i = 0; i < allMoves.Length; i++)
-        {
-            List<string> movesPerPiece = new List<string>();
-            for(int j = 1; j < allMoves[i].Length; j++)
-            {
-                movesPerPiece.Add(allMoves[i][j]);
-            }
-            possibleMovesMap.Add(allMoves[i][0], movesPerPiece);
-        }
-    }
-
-    //Version die Liste verwendet
+    //This will put all possible moves into a map which than can be accessed by the key which is the 
     async public void calculatePossibelMoves(List<string> allMoves)
     {
         possibleMovesMap = new Dictionary<string, List<string>>();
@@ -224,18 +341,17 @@ public class Chessmana : MonoBehaviour
         }
     }
 
-    //Mal schaun ob das ding überhaupt darf 
     public bool possibleToMove()
     {
         string selectedPiecePosition = DecodingUtil.XYToNotation(xBoard, yBoard);
         if (possibleMovesMap.TryGetValue(selectedPiecePosition, out List<string> moves))
         {
             string result = string.Join(", ", moves);
+            UnityEngine.Debug.LogError(result);
         }
         return possibleMovesMap.ContainsKey(selectedPiecePosition);
     }
 
-    //Get the current key out of the map and generate plates for all entries
     public void generateAllPlates()
     {
         string selectedPiecePosition = DecodingUtil.XYToNotation(xBoard, yBoard);
@@ -252,4 +368,5 @@ public class Chessmana : MonoBehaviour
             }
         }
     }
+
 }

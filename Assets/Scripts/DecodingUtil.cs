@@ -17,7 +17,7 @@ public static class DecodingUtil
         int y = Convert.ToInt32(notation[1].ToString()) - 1;
         return Tuple.Create(x, y);
     }
-    //Split the input string into a list where every element contains two chars (It was meant to handle possible moves which come in the format of D1E2...)
+    //Split the input string into a list where every element contains two chars
     public static List<string> splitIntoPieces(string input)
     {
         int length = input.Length;
@@ -30,6 +30,10 @@ public static class DecodingUtil
             int endIndex = Math.Min(startIndex + chunkSize, length);
             result.Add(input.Substring(startIndex, endIndex - startIndex));
         }
+        //Debugging
+        //string r = string.Join(", ", result);
+        //UnityEngine.Debug.LogError(r);
+        //END
         return result;
     }
 }

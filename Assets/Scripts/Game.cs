@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Unity.VisualScripting;
@@ -10,7 +11,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using WebSocketSharp;
 
 
 public class Game : MonoBehaviour
@@ -29,11 +30,17 @@ public class Game : MonoBehaviour
     private bool gameOver = false;
     private int countBlack = 0;
     private int countWhite = 0;
+
+    private WebSocket ws;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        JSONToBoard();
+        /*New Workflow with GlobalVariables*/
+        cData = GlobalVariables.cd;
 
+        JSONToBoard();
         //Set all piece positions on the position board
         for (int i = 0; i < countWhite; i++)
         {
@@ -120,49 +127,13 @@ public class Game : MonoBehaviour
         GameObject.FindGameObjectWithTag("RestartText").GetComponent<Text>().enabled = true;
     }
 
-
-
     //
     public void JSONToBoard()
     {
-        if (jsonFile != null)
-        {
-            string jsonString = jsonFile.text;
-
-            if (string.IsNullOrEmpty(jsonString))
-            {
-                UnityEngine.Debug.LogError("JSON string is null or empty.");
-                return;
-            }
-
-            cData = ChessJsonUtility.fromJSON(jsonString);
-        }
-        else
-        {
-            UnityEngine.Debug.LogError("jsonFile is not assigned.");
-        }
-
-        //Debugging
-        /*
-        if (cData.possibleMoves==null) UnityEngine.Debug.LogError("Empty List");
-        if (cData.possibleMoves != null)
-        {
-                foreach (var move in cData.possibleMoves)
-                {
-                    UnityEngine.Debug.LogError("Move: " + move);
-                }            
-        }*/
-        //UnityEngine.Debug.LogError("Number of moves: " + move.moves.Count);
-
-
         string s = cData.FEN;
         string[] data = s.Split(' ');
         string[] lines = data[0].Split('/');
 
-
-        //Debugging
-        //UnityEngine.Debug.LogError(data[1]);
-        //Declare the current actor
         if (data[1] == "w")
         {
             currentPlayer = "white";
@@ -174,11 +145,12 @@ public class Game : MonoBehaviour
         decPlayers(lines);
     }
 
+    //Iterate FEN and decleare the whole board read from the JSON-String
     public void decPlayers(string[] lines)
     {
         int xOff = 7;
         int yOff = 7;
-        for (int x = 0; x<lines.Length; x++)
+        for (int x = 0; x < lines.Length; x++)
         {
             int y = 0;
             for (int j = 0; j < lines[x].Length; j++)
@@ -193,17 +165,17 @@ public class Game : MonoBehaviour
                 {
                     if (char.IsLower(cChar))
                     {
-                        playerBlack[countBlack] = Create(cChar.ToString(), yOff-y, xOff-x);
+                        playerBlack[countBlack] = Create(cChar.ToString(), y, xOff - x);
                         countBlack++;
                     }
                     if (char.IsUpper(cChar))
                     {
-                        playerWhite[countWhite] = Create(cChar.ToString(), yOff-y, xOff-x);
+                        playerWhite[countWhite] = Create(cChar.ToString(), y, xOff - x);
                         countWhite++;
                     }
                     y++;
                 }
             }
         }
-    } 
+    }
 }

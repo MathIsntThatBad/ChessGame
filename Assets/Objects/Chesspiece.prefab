@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 349879546577949779}
   - component: {fileID: -9046358729334204900}
   - component: {fileID: -2551456823189650544}
+  - component: {fileID: -6422383656699475074}
   m_Layer: 0
   m_Name: Chesspiece
   m_TagString: Untagged
@@ -101,13 +102,13 @@ MonoBehaviour:
   JSONFile: {fileID: 4900000, guid: ebce18c3564d7c549806cb9cf77e93c3, type: 3}
   controller: {fileID: 0}
   movePlate: {fileID: 4052096594459673922, guid: 626ae42299cb53641b412afb6ab8c023, type: 3}
-  bBauer: {fileID: 21300000, guid: 5dc985e86b527e34a8c3ed45d532852c, type: 3}
+  bBauer: {fileID: 21300000, guid: dc831f99d86b778489d620c942a4e0ac, type: 3}
   bDame: {fileID: 21300000, guid: 8273cbd922cca074093640592bc810c3, type: 3}
   bSpringer: {fileID: 21300000, guid: f55c16842eb76f149a7e28848e739e43, type: 3}
   bTurm: {fileID: 21300000, guid: b9a706b16bab89749b45515e6427406c, type: 3}
   bKoenig: {fileID: 21300000, guid: 610e4ce30198a154cb531bc6dce11573, type: 3}
   bLaeufer: {fileID: 21300000, guid: 85a75018679934a40af5a3a622fec98c, type: 3}
-  wBauer: {fileID: 21300000, guid: 8fb85561f47861b4e817deafcf41b84f, type: 3}
+  wBauer: {fileID: 21300000, guid: 48ed97910023ce74f8def949b9decf24, type: 3}
   wDame: {fileID: 21300000, guid: 65152c5daddc43847a7e5bf7cf38daed, type: 3}
   wSpringer: {fileID: 21300000, guid: 2c05a27cd6c6df640a33ee65af5ffc7e, type: 3}
   wTurm: {fileID: 21300000, guid: 6d8ce339dd6bf344c83a3ef96d8338a7, type: 3}
@@ -158,3 +159,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6.48, y: 6.48}
   m_EdgeRadius: 0
+--- !u!114 &-6422383656699475074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7619737640128435565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69d7020bab9cf314898860d31669ae6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

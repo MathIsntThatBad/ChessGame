@@ -478,6 +478,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1785450715}
   - component: {fileID: 1785450714}
+  - component: {fileID: 1785450716}
+  - component: {fileID: 1785450717}
   m_Layer: 0
   m_Name: Controller
   m_TagString: GameController
@@ -514,6 +516,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1785450716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785450713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8b9efa7e193b5d40823913e726a274d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jsonFile: {fileID: 4900000, guid: ebce18c3564d7c549806cb9cf77e93c3, type: 3}
+--- !u!114 &1785450717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785450713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae9430643520734890db3e528df192a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursorTexture: {fileID: 2800000, guid: fc11302f84b4c084c91a3f8c385019c9, type: 3}
 --- !u!1 &1832093762
 GameObject:
   m_ObjectHideFlags: 0

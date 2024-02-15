@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class GlobalVariables : MonoBehaviour
 {
-    public static ChessData cd;
+    public static ChessData globalChessData;
+
+    public static string black = "black";
+    public static string white = "white";
+
     public TextAsset jsonFile;
 
     void Awake()
@@ -19,7 +23,7 @@ public class GlobalVariables : MonoBehaviour
                 return;
             }
 
-            cd = ChessJsonUtility.fromJSON(jsonString);
+            globalChessData = ChessJsonUtility.fromJSON(jsonString);
         }
         else
         {

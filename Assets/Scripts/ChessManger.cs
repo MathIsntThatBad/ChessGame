@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chessmana : MonoBehaviour
+public class ChessManger : MonoBehaviour
 {
     //JSON ACCESS
     private ChessData chessData;
@@ -31,26 +31,26 @@ public class Chessmana : MonoBehaviour
         controller = GameObject.FindGameObjectWithTag("GameController");
 
         /*New Workflow with GlobalVariables*/
-        chessData = GlobalVariables.cd;
+        chessData = GlobalVariables.globalChessData;
 
 
         SetCoordinates();
 
         switch (this.name)
         {
-            case "p": this.GetComponent<SpriteRenderer>().sprite = bBauer; player = "black"; break;
-            case "q": this.GetComponent<SpriteRenderer>().sprite = bDame; player = "black"; break;
-            case "n": this.GetComponent<SpriteRenderer>().sprite = bSpringer; player = "black"; break;
-            case "r": this.GetComponent<SpriteRenderer>().sprite = bTurm; player = "black"; break;
-            case "k": this.GetComponent<SpriteRenderer>().sprite = bKoenig; player = "black"; break;
-            case "b": this.GetComponent<SpriteRenderer>().sprite = bLaeufer; player = "black"; break;
+            case "p": this.GetComponent<SpriteRenderer>().sprite = bBauer; player = GlobalVariables.black; break;
+            case "q": this.GetComponent<SpriteRenderer>().sprite = bDame; player = GlobalVariables.black; break;
+            case "n": this.GetComponent<SpriteRenderer>().sprite = bSpringer; player = GlobalVariables.black; break;
+            case "r": this.GetComponent<SpriteRenderer>().sprite = bTurm; player = GlobalVariables.black; break;
+            case "k": this.GetComponent<SpriteRenderer>().sprite = bKoenig; player = GlobalVariables.black; break;
+            case "b": this.GetComponent<SpriteRenderer>().sprite = bLaeufer; player = GlobalVariables.black; break;
 
-            case "P": this.GetComponent<SpriteRenderer>().sprite = wBauer; player = "white"; break;
-            case "Q": this.GetComponent<SpriteRenderer>().sprite = wDame; player = "white"; break;
-            case "N": this.GetComponent<SpriteRenderer>().sprite = wSpringer; player = "white"; break;
-            case "R": this.GetComponent<SpriteRenderer>().sprite = wTurm; player = "white"; break;
-            case "K": this.GetComponent<SpriteRenderer>().sprite = wKoenig; player = "white"; break;
-            case "B": this.GetComponent<SpriteRenderer>().sprite = wLaeufer; player = "white"; break;
+            case "P": this.GetComponent<SpriteRenderer>().sprite = wBauer; player = GlobalVariables.white; break;
+            case "Q": this.GetComponent<SpriteRenderer>().sprite = wDame; player = GlobalVariables.white; break;
+            case "N": this.GetComponent<SpriteRenderer>().sprite = wSpringer; player = GlobalVariables.white; break;
+            case "R": this.GetComponent<SpriteRenderer>().sprite = wTurm; player = GlobalVariables.white; break;
+            case "K": this.GetComponent<SpriteRenderer>().sprite = wKoenig; player = GlobalVariables.white; break;
+            case "B": this.GetComponent<SpriteRenderer>().sprite = wLaeufer; player = GlobalVariables.white; break;
         }
     }
 
@@ -134,7 +134,7 @@ public class Chessmana : MonoBehaviour
             {
                 MovePlateAttackSpawn(x, y,false);
             }
-            else if (cp.GetComponent<Chessmana>().player != player)
+            else if (cp.GetComponent<ChessManger>().player != player)
             {
                 MovePlateAttackSpawn(x, y,true);
             }

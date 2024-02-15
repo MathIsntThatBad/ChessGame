@@ -37,8 +37,31 @@ public class Game : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //string wsUrl = "wss://synchronerealitaeten2324.informatik.uni-bremen.de:8543/chess/game1";
+        string wsUrl = "ws://localhost:8080/entrance";
+        ws = new WebSocket(wsUrl);
+        ws.Log.Level = LogLevel.Trace;
+        ws.Connect();
+        UnityEngine.Debug.LogError("WebSocketConnection");
+        ws.OnMessage += (sender, e) =>
+        {
+            UnityEngine.Debug.Log("WebSocket Server Response: " + e.Data);
+            // Process the WebSocket received data
+            //ChessData chessData = ChessJsonUtility.fromJSON(e.Data);
+        };
+
+        ws.OnError += (sender, e) =>
+        {
+            UnityEngine.Debug.Log("WebSocket Error: " + e.Message);
+        };
+        ws.OnOpen += (sender, e) =>
+        {
+            UnityEngine.Debug.Log("WebSocket Opened");
+        };
+
+
         /*New Workflow with GlobalVariables*/
-        cData = GlobalVariables.cd;
+        cData = GlobalVariables.globalChessData;
 
         JSONToBoard();
         //Set all piece positions on the position board
@@ -56,7 +79,7 @@ public class Game : MonoBehaviour
     public GameObject Create(string name, int x, int y)
     {
         GameObject obj = Instantiate(chesspiece, new Vector3(0, 0, -1), Quaternion.identity);
-        Chessmana cm = obj.GetComponent<Chessmana>();
+        ChessManger cm = obj.GetComponent<ChessManger>();
         cm.name = name;
         cm.SetXBoard(x);
         cm.SetYBoard(y);
@@ -66,7 +89,7 @@ public class Game : MonoBehaviour
 
     public void SetPosition(GameObject obj)
     {
-        Chessmana cm = obj.GetComponent<Chessmana>();
+        ChessManger cm = obj.GetComponent<ChessManger>();
         positions[cm.GetXBoard(), cm.GetYBoard()] = obj;
     }
 
@@ -98,13 +121,13 @@ public class Game : MonoBehaviour
 
     public void NextTurn()
     {
-        if (currentPlayer == "white")
+        if (currentPlayer == GlobalVariables.white)
         {
-            currentPlayer = "black";
+            currentPlayer = GlobalVariables.black;
         }
         else
         {
-            currentPlayer = "white";
+            currentPlayer = GlobalVariables.white;
         }
     }
 
@@ -127,7 +150,7 @@ public class Game : MonoBehaviour
         GameObject.FindGameObjectWithTag("RestartText").GetComponent<Text>().enabled = true;
     }
 
-    //
+    
     public void JSONToBoard()
     {
         string s = cData.FEN;
@@ -136,12 +159,13 @@ public class Game : MonoBehaviour
 
         if (data[1] == "w")
         {
-            currentPlayer = "white";
+            currentPlayer = GlobalVariables.white;
         }
         else
         {
-            currentPlayer = "black";
+            currentPlayer = GlobalVariables.black;
         }
+
         decPlayers(lines);
     }
 

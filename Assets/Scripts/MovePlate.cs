@@ -31,23 +31,23 @@ public class MovePlate : MonoBehaviour
         {
             GameObject cp = controller.GetComponent<Game>().GetPosition(matrixX, matrixY);
 
-            if (cp.name == "wKoenig") controller.GetComponent<Game>().Winner("black");
-            if (cp.name == "bKoenig") controller.GetComponent<Game>().Winner("white");
+            if (cp.name == "wKoenig") controller.GetComponent<Game>().Winner(GlobalVariables.black);
+            if (cp.name == "bKoenig") controller.GetComponent<Game>().Winner(GlobalVariables.white);
 
             Destroy(cp);
         }
 
-        controller.GetComponent<Game>().SetPositionEmpty(reference.GetComponent<Chessmana>().GetXBoard(), reference.GetComponent<Chessmana>().GetYBoard());
+        controller.GetComponent<Game>().SetPositionEmpty(reference.GetComponent<ChessManger>().GetXBoard(), reference.GetComponent<ChessManger>().GetYBoard());
 
-        reference.GetComponent<Chessmana>().SetXBoard(matrixX);
-        reference.GetComponent<Chessmana>().SetYBoard(matrixY);
-        reference.GetComponent<Chessmana>().SetCoordinates();
+        reference.GetComponent<ChessManger>().SetXBoard(matrixX);
+        reference.GetComponent<ChessManger>().SetYBoard(matrixY);
+        reference.GetComponent<ChessManger>().SetCoordinates();
 
         controller.GetComponent<Game>().SetPosition(reference);
 
         controller.GetComponent<Game>().NextTurn();
 
-        reference.GetComponent<Chessmana>().DestroyMovePlates();
+        reference.GetComponent<ChessManger>().DestroyMovePlates();
     }
 
     public void SetCoordinates(int x, int y)

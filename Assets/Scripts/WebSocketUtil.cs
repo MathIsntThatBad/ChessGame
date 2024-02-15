@@ -7,7 +7,7 @@ public class WebSocketUtil : MonoBehaviour
 {
     private WebSocket ws;
     /*string wsUrl = "wss://synchronerealitaeten2324.informatik.uni-bremen.de:8543/chess/game1";
-    //string wsUrl = "wss://94.242.206.52:8543/chess/game1";
+    //string wsUrl = "ws://94.242.206.52:8543/chess/game1";
     ws = new WebSocket(wsUrl);
     ws.SslConfiguration.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) =>
     {
